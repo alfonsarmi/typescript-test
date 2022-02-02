@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
-import { BusinessProcessScreenEntity } from "src/app/core/models/business-process-srcreen-models/business-process-screen-entity.model";
+import { ExploreEntity } from "src/app/core/models/business-process-srcreen-models/business-process-screen-entity.model";
 import { BusinessProcessScreenSummaryItem } from "src/app/core/models/business-process-srcreen-models/business-process-screen-summary-item.model";
 import { Location } from "src/app/core/models/locations/location.model";
 import {
@@ -12,13 +12,13 @@ import {
 @Injectable({
   providedIn: "root",
 })
-export class BusinessProcessSummaryCreatorService {
+export class ExploreEntitySummaryCreatorService {
   constructor(private translate: TranslateService) {}
 
   setSummaryInformation(
-    steps: BusinessProcessScreenEntity[],
-    businessProcesses: BusinessProcessScreenEntity[],
-    groups: BusinessProcessScreenEntity[],
+    steps: ExploreEntity[],
+    businessProcesses: ExploreEntity[],
+    groups: ExploreEntity[],
     allLocations: Location[]
   ) {
     const locationTree = getLocationsTree(allLocations);
@@ -58,10 +58,10 @@ export class BusinessProcessSummaryCreatorService {
 
   private setEntitySummary(
     locationTree: Location[],
-    entity: BusinessProcessScreenEntity,
-    steps: BusinessProcessScreenEntity[],
-    businessProcesses: BusinessProcessScreenEntity[],
-    groups: BusinessProcessScreenEntity[],
+    entity: ExploreEntity,
+    steps: ExploreEntity[],
+    businessProcesses: ExploreEntity[],
+    groups: ExploreEntity[],
     allLocations: Location[]
   ) {
     entity.maxSummaryItems = 0;
@@ -109,10 +109,10 @@ export class BusinessProcessSummaryCreatorService {
 
   private getSummaryVariables(
     locationTree: Location[],
-    entity: BusinessProcessScreenEntity,
-    steps: BusinessProcessScreenEntity[],
-    businessProcesses: BusinessProcessScreenEntity[],
-    groups: BusinessProcessScreenEntity[]
+    entity: ExploreEntity,
+    steps: ExploreEntity[],
+    businessProcesses: ExploreEntity[],
+    groups: ExploreEntity[]
   ) {
     const totalLocations = getCitiesFromLocationTreeBranch(
       locationTree,
@@ -120,7 +120,7 @@ export class BusinessProcessSummaryCreatorService {
     ).length;
     const locationsLinked = entity.numberOfLocations;
 
-    let entitiesInSameLocation: BusinessProcessScreenEntity[] = [];
+    let entitiesInSameLocation: ExploreEntity[] = [];
     if (entity.entityType == "business_process")
       entitiesInSameLocation = businessProcesses.filter(
         bp => bp.locationId == entity.locationId
@@ -152,8 +152,8 @@ export class BusinessProcessSummaryCreatorService {
   }
 
   private getSecurity(
-    entity: BusinessProcessScreenEntity,
-    steps: BusinessProcessScreenEntity[]
+    entity: ExploreEntity,
+    steps: ExploreEntity[]
   ): BusinessProcessScreenSummaryItem {
     entity.maxSummaryItems++;
     if (!steps || !steps.length || !entity.mapLocations) return;
@@ -235,8 +235,8 @@ export class BusinessProcessSummaryCreatorService {
   }
 
   private getCodeQuality(
-    entity: BusinessProcessScreenEntity,
-    steps: BusinessProcessScreenEntity[]
+    entity: ExploreEntity,
+    steps: ExploreEntity[]
   ): BusinessProcessScreenSummaryItem {
     const implementationLocationsIds = (entity?.mapLocations ?? [])
       .filter(l => l.isSelected)
@@ -329,15 +329,15 @@ export class BusinessProcessSummaryCreatorService {
   }
 
   private getAutomatization(
-    entity: BusinessProcessScreenEntity,
-    steps: BusinessProcessScreenEntity[],
-    businessProcesses: BusinessProcessScreenEntity[]
+    entity: ExploreEntity,
+    steps: ExploreEntity[],
+    businessProcesses: ExploreEntity[]
   ): BusinessProcessScreenSummaryItem {
     entity.maxSummaryItems++;
     if (!entity.mapLocations) return;
     const implementationLocationsIds = entity.mapLocations.map(l => l.id);
 
-    let implementationSteps: BusinessProcessScreenEntity[] = null;
+    let implementationSteps: ExploreEntity[] = null;
     if (entity.entityType == "group") {
       const groupBusinessProcessesIds = businessProcesses
         .filter(b =>
@@ -414,8 +414,8 @@ export class BusinessProcessSummaryCreatorService {
   }
 
   private getHomogeneity(
-    entity: BusinessProcessScreenEntity,
-    steps: BusinessProcessScreenEntity[],
+    entity: ExploreEntity,
+    steps: ExploreEntity[],
     allLocations: Location[]
   ): BusinessProcessScreenSummaryItem {
     if (this.isImplementationLocation(entity.locationId, allLocations)) return;
@@ -503,7 +503,7 @@ export class BusinessProcessSummaryCreatorService {
   private getRelevance(
     numberOfUsersLinked: number,
     avgNumberOfUsers: number,
-    entity: BusinessProcessScreenEntity
+    entity: ExploreEntity
   ): BusinessProcessScreenSummaryItem {
     entity.maxSummaryItems++;
 
@@ -560,9 +560,9 @@ export class BusinessProcessSummaryCreatorService {
   private getScope(
     locationsLinked: number,
     totalLocations: number,
-    entity: BusinessProcessScreenEntity,
+    entity: ExploreEntity,
     allLocations: Location[],
-    businessProcesses: BusinessProcessScreenEntity[]
+    businessProcesses: ExploreEntity[]
   ): BusinessProcessScreenSummaryItem {
     if (this.isImplementationLocation(entity.locationId, allLocations)) return;
 
@@ -591,7 +591,7 @@ export class BusinessProcessSummaryCreatorService {
     locationsLinked: number,
     totalLocations: number,
     allLocations: Location[],
-    entity: BusinessProcessScreenEntity
+    entity: ExploreEntity
   ) {
     const spreadPct = locationsLinked / totalLocations;
     const numberOfLocationsText = this.translate.instant(
@@ -654,8 +654,8 @@ export class BusinessProcessSummaryCreatorService {
     locationsLinked: number,
     totalLocations: number,
     allLocations: Location[],
-    entity: BusinessProcessScreenEntity,
-    businessProcesses: BusinessProcessScreenEntity[]
+    entity: ExploreEntity,
+    businessProcesses: ExploreEntity[]
   ) {
     const spreadPct = locationsLinked / totalLocations;
     const numberOfLocationsText = this.translate.instant(
@@ -736,7 +736,7 @@ export class BusinessProcessSummaryCreatorService {
     };
   }
 
-  private getEntityNameAndPlural(entity: BusinessProcessScreenEntity) {
+  private getEntityNameAndPlural(entity: ExploreEntity) {
     let entityName = "";
     let entityNamePlural = "";
     switch (entity.entityType) {
